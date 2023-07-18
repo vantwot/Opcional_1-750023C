@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <pthread.h>
 
-#define NUM_THREADS 2
+#define NUM_THREADS 8
 #define ARRAY_SIZE 16
 #define WORK_PER_THREAD (ARRAY_SIZE/NUM_THREADS)
 
