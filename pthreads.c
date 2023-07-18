@@ -2,6 +2,9 @@
 #include <pthread.h>
 
 #define NUM_THREADS 2
+#define ARRAY_SIZE 16
+#define WORK_PER_THREAD (ARRAY_SIZE/NUM_THREADS)
+
 // Implementación de la función func(m,n)
 int func(int m, int n) {
     if (m == 0) {
@@ -13,14 +16,16 @@ int func(int m, int n) {
     }
 }
 
-// Variable global para los valores V y Vr
-int V[NUM_THREADS] = { 10, 11, 12, 13, 10, 11, 12, 13, 10, 11, 12, 13, 10, 11, 12, 13 };
-int Vr[NUM_THREADS] = {};
+// Variables globales para los valores V y Vr
+int V[ARRAY_SIZE] = { 10, 11, 12, 13, 10, 11, 12, 13, 10, 11, 12, 13, 10, 11, 12, 13 };
+int Vr[ARRAY_SIZE] = {};
 
 // Función que ejecutará cada hilo
 void* threadFunc(void* arg) {
     int index = (int)(long)arg;
-    Vr[index] = func(3, V[index]);
+    for(int i = index*WORK_PER_THREAD; i < (index+1)*WORK_PER_THREAD; i++) {
+        Vr[i] = func(3, V[i]);
+    }
     pthread_exit(NULL);
 }
 
@@ -30,7 +35,7 @@ int main() {
 
     // Creación de los hilos
     for(int i = 0; i < NUM_THREADS; i++) {
-        pthread_create(&threads[i], NULL, threadFunc, (void*)(long)i); // Convertir entero a puntero
+        pthread_create(&threads[i], NULL, threadFunc, (void*)(long)i);
     }
 
     // Espera a que todos los hilos terminen
@@ -40,7 +45,7 @@ int main() {
 
     // Impresión de los resultados
     printf("Vr: ");
-    for(int i = 0; i < NUM_THREADS; i++) {
+    for(int i = 0; i < ARRAY_SIZE; i++) {
         printf("%d ", Vr[i]);
     }
     printf("\n");
