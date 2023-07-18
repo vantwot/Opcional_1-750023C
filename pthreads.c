@@ -19,7 +19,7 @@ int Vr[NUM_THREADS] = {};
 
 // Función que ejecutará cada hilo
 void* threadFunc(void* arg) {
-    int index = (int)(long)arg; // Convertir puntero a entero
+    int index = (int)(long)arg;
     Vr[index] = func(3, V[index]);
     pthread_exit(NULL);
 }
